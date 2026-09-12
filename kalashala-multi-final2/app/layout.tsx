@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Kalashala — कला • कौशल • आत्मनिर्भरता",
+  title: "Kalashala — कला • ककौशल्य • आत्मनिर्भरता",
   description: "Kalashala online craft and embroidery learning platform.",
 };
 
