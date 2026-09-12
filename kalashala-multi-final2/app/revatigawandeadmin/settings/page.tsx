@@ -1,13 +1,13 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { NavBar } from "@/components/NavBar";
 import { getSupabaseBrowser } from "@/lib/supabase";
 
 type Course = { id: string; title: string; description: string | null };
 
-export default function AdminSettingsPage() {
+function AdminSettingsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const requestedCourseId = searchParams.get("courseId") || "";
@@ -154,5 +154,20 @@ export default function AdminSettingsPage() {
         )}
       </main>
     </div>
+  );
+}
+
+export default function AdminSettingsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="site-shell">
+          <NavBar admin />
+          <main className="container page-loading">Loading settings…</main>
+        </div>
+      }
+    >
+      <AdminSettingsContent />
+    </Suspense>
   );
 }
