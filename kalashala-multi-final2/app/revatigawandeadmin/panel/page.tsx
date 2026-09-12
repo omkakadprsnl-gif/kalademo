@@ -312,6 +312,45 @@ export default function AdminPanel() {
     }
   }
 
+  async function deleteCourse(course: Course) {
+    const confirmed = window.confirm(
+      `Delete "${course.title}"? This will permanently delete the course, its password, and all lectures in it.`
+    );
+    if (!confirmed) return;
+
+    const supabase = getSupabaseBrowser();
+    if (!supabase) {
+      setError("Supabase is not configured.");
+      return;
+    }
+
+    setMessage("");
+    setError("");
+
+    try {
+      const { error: deleteError } = await supabase.rpc("admin_delete_course", {
+        p_course_id: course.id,
+      });
+
+      if (deleteError) throw new Error(deleteError.message);
+
+      const { data: refreshed, error: refreshError } = await supabase
+        .from("courses")
+        .select("id,title,description")
+        .order("created_at", { ascending: true });
+
+      if (refreshError) throw new Error(refreshError.message);
+
+      const nextCourses = (refreshed || []) as Course[];
+      setCourses(nextCourses);
+      setSelectedCourseId(nextCourses[0]?.id || "");
+      setLectures([]);
+      setMessage("Course deleted successfully.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unable to delete course.");
+    }
+  }
+
   async function deleteLecture(lecture: Lecture) {
     if (!window.confirm(`Delete "${lecture.title}"?`)) return;
 
@@ -388,7 +427,17 @@ export default function AdminPanel() {
                   <h2>{selectedCourse.title}</h2>
                   {selectedCourse.description && <p className="sub" style={{ maxWidth: 760, marginTop: 10 }}>{selectedCourse.description}</p>}
                 </div>
-                <Link className="btn btn-outline" href={`/revatigawandeadmin/settings?courseId=${encodeURIComponent(selectedCourse.id)}`}>Edit settings</Link>
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "flex-end" }}>
+                  <Link className="btn btn-outline" href={`/revatigawandeadmin/settings?courseId=${encodeURIComponent(selectedCourse.id)}`}>Edit settings</Link>
+                  <button
+                    type="button"
+                    className="btn btn-outline"
+                    onClick={() => deleteCourse(selectedCourse)}
+                    style={{ color: "#a62d20", borderColor: "#e7b8b1" }}
+                  >
+                    Delete course
+                  </button>
+                </div>
               </div>
             </section>
 
