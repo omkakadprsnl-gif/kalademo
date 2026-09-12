@@ -1,0 +1,967 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap");
+
+:root {
+  --cream: #faf7f2;
+  --cream-dark: #f2ece4;
+  --white: #ffffff;
+
+  --brown: #3b1711;
+  --brown-light: #65453d;
+
+  --orange: #e97817;
+  --orange-light: #f9e7d2;
+
+  --border: #e5d9ce;
+  --muted: #876f67;
+
+  --danger: #a62d20;
+
+  --container: 1080px;
+
+  --radius: 14px;
+
+  --shadow:
+    0 18px 50px rgba(59, 23, 17, 0.07);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--brown);
+  font-family: Inter, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* =========================================================
+   GLOBAL LAYOUT
+   ========================================================= */
+
+.site-shell {
+  min-height: 100vh;
+  background: var(--cream);
+}
+
+.container {
+  width: min(
+    calc(100% - 40px),
+    var(--container)
+  );
+
+  margin: 0 auto;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.simple-header {
+  width: 100%;
+  min-height: 76px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 32px;
+
+  background: rgba(250, 247, 242, 0.96);
+
+  border-bottom: 1px solid var(--border);
+
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+
+  color: var(--brown);
+
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: 27px;
+  line-height: 1;
+}
+
+.brand img {
+  width: 48px;
+  height: 48px;
+
+  object-fit: contain;
+
+  border-radius: 6px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.header-link {
+  color: var(--brown-light);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.header-link:hover {
+  color: var(--orange);
+}
+
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+
+  color: var(--brown);
+
+  font-family:
+    "DM Serif Display",
+    Georgia,
+    serif;
+
+  font-weight: 400;
+
+  line-height: 1.12;
+}
+
+h1 {
+  font-size: clamp(42px, 6vw, 64px);
+}
+
+h2 {
+  font-size: clamp(32px, 4vw, 46px);
+}
+
+h3 {
+  font-size: 23px;
+}
+
+p {
+  margin-top: 0;
+}
+
+.sub {
+  color: var(--muted);
+}
+
+.eyebrow {
+  margin-bottom: 9px;
+
+  color: var(--orange);
+
+  font-size: 12px;
+  font-weight: 700;
+
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.btn {
+  min-height: 46px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 20px;
+
+  border-radius: 10px;
+
+  border: 1px solid transparent;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--brown);
+  color: white;
+  border-color: var(--brown);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #2d100b;
+  border-color: #2d100b;
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--brown);
+  border-color: var(--border);
+}
+
+.btn-outline:hover:not(:disabled) {
+  border-color: var(--brown);
+  background: var(--white);
+}
+
+/* =========================================================
+   AUTH PAGES
+   ========================================================= */
+
+.auth-page {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 40px 20px;
+}
+
+.auth-card {
+  width: min(100%, 460px);
+
+  padding: 44px;
+
+  background: var(--white);
+
+  border: 1px solid var(--border);
+
+  border-radius: 18px;
+
+  box-shadow: var(--shadow);
+}
+
+.auth-card > a {
+  display: block;
+  margin-bottom: 28px;
+}
+
+.auth-logo {
+  width: 190px;
+  height: 100px;
+
+  object-fit: contain;
+
+  margin: 0 auto;
+}
+
+.auth-card h1 {
+  font-size: 42px;
+  text-align: center;
+}
+
+.auth-card .sub {
+  margin: 10px 0 30px;
+  text-align: center;
+}
+
+.auth-submit {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.field {
+  margin-bottom: 20px;
+}
+
+.field label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: var(--brown);
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+
+  padding: 13px 15px;
+
+  color: var(--brown);
+
+  background: white;
+
+  border: 1px solid var(--border);
+
+  border-radius: 10px;
+
+  outline: none;
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.field input {
+  min-height: 48px;
+}
+
+.field textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  border-color: var(--orange);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(233, 120, 23, 0.12);
+}
+
+.message {
+  margin-top: 18px;
+
+  padding: 13px 15px;
+
+  border-radius: 10px;
+
+  font-size: 14px;
+}
+
+.message.error {
+  color: var(--danger);
+
+  background: #fff2ef;
+
+  border: 1px solid #efc9c3;
+}
+
+.message.info {
+  color: var(--brown);
+
+  background: var(--orange-light);
+
+  border: 1px solid #efd1b3;
+}
+
+/* =========================================================
+   STUDENT DASHBOARD
+   ========================================================= */
+
+.dashboard-main {
+  padding-top: 64px;
+  padding-bottom: 80px;
+}
+
+.dashboard-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 40px;
+
+  margin-bottom: 24px;
+}
+
+.dashboard-head h1 {
+  max-width: 760px;
+}
+
+.course-description {
+  max-width: 760px;
+
+  margin-bottom: 56px;
+
+  color: var(--muted);
+
+  font-size: 18px;
+}
+
+.lessons-section {
+  padding-top: 12px;
+}
+
+.section-heading-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  margin-bottom: 22px;
+}
+
+.lesson-count {
+  color: var(--muted);
+
+  font-size: 14px;
+}
+
+.lesson-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lesson-row {
+  display: grid;
+  grid-template-columns: 58px 1fr auto;
+  align-items: center;
+
+  gap: 20px;
+
+  padding: 22px 24px;
+
+  background: white;
+
+  border: 1px solid var(--border);
+
+  border-radius: 14px;
+
+  transition:
+    border-color 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.lesson-row:hover {
+  transform: translateY(-2px);
+
+  border-color: #d3c3b5;
+
+  box-shadow:
+    0 12px 32px
+    rgba(59, 23, 17, 0.06);
+}
+
+.lesson-number {
+  width: 52px;
+  height: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--orange);
+
+  background: var(--orange-light);
+
+  border-radius: 12px;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.lesson-content h3 {
+  margin-bottom: 3px;
+
+  font-size: 22px;
+}
+
+.lesson-content p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 14px;
+}
+
+.lesson-status {
+  color: var(--orange);
+
+  font-size: 14px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+.empty-state {
+  padding: 42px;
+
+  color: var(--muted);
+
+  background: white;
+
+  border: 1px solid var(--border);
+
+  border-radius: 14px;
+
+  text-align: center;
+}
+
+/* =========================================================
+   COURSE / LESSON PAGE
+   ========================================================= */
+
+.course-page {
+  padding-top: 46px;
+  padding-bottom: 90px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+
+  margin-bottom: 34px;
+
+  color: var(--brown-light);
+
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.back-link:hover {
+  color: var(--orange);
+}
+
+.lesson-heading {
+  max-width: 820px;
+
+  margin-bottom: 30px;
+}
+
+.lesson-heading h1 {
+  font-size: clamp(38px, 5vw, 58px);
+}
+
+.lesson-heading p {
+  margin: 15px 0 0;
+
+  color: var(--muted);
+
+  font-size: 17px;
+}
+
+/*
+   The video is intentionally constrained.
+   This prevents YouTube from exploding to the
+   dimensions of the original image/container.
+*/
+
+.video-box {
+  position: relative;
+
+  width: 100%;
+
+  aspect-ratio: 16 / 9;
+
+  overflow: hidden;
+
+  background: #18120f;
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 18px 50px
+    rgba(59, 23, 17, 0.12);
+}
+
+.video-box iframe {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  border: 0;
+}
+
+.video-empty {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+
+  color: white;
+
+  text-align: center;
+}
+
+.lesson-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-top: 24px;
+}
+
+/* =========================================================
+   ADMIN
+   ========================================================= */
+
+.admin-main {
+  padding-top: 54px;
+  padding-bottom: 80px;
+}
+
+.admin-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  margin-bottom: 34px;
+}
+
+.admin-head h1 {
+  font-size: 52px;
+}
+
+.admin-panel {
+  margin-bottom: 22px;
+
+  background: white;
+
+  border: 1px solid var(--border);
+
+  border-radius: 16px;
+
+  overflow: hidden;
+}
+
+.panel-heading {
+  padding: 28px 30px;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.panel-heading-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 25px;
+}
+
+.panel-heading h2 {
+  font-size: 31px;
+}
+
+.panel-heading .sub {
+  margin: 6px 0 0;
+}
+
+.admin-empty {
+  padding: 36px;
+
+  color: var(--muted);
+
+  text-align: center;
+}
+
+.admin-form {
+  padding: 30px;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+
+  border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 17px 20px;
+
+  border-bottom: 1px solid var(--border);
+
+  text-align: left;
+  vertical-align: middle;
+}
+
+.admin-table th {
+  color: var(--muted);
+
+  background: #fcfaf7;
+
+  font-size: 12px;
+
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.admin-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.table-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.text-button {
+  padding: 0;
+
+  color: var(--brown);
+
+  background: none;
+
+  border: 0;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.text-button:hover {
+  color: var(--orange);
+}
+
+.text-button.danger {
+  color: var(--danger);
+}
+
+.modal-backdrop {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 100;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background:
+    rgba(35, 18, 13, 0.45);
+}
+
+.modal {
+  width: min(100%, 620px);
+
+  max-height: calc(100vh - 40px);
+
+  overflow-y: auto;
+
+  background: white;
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 30px 80px
+    rgba(0, 0, 0, 0.2);
+}
+
+.modal-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 26px 30px;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-heading h2 {
+  font-size: 32px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+
+  gap: 12px;
+
+  margin-top: 8px;
+}
+
+/* =========================================================
+   GENERIC LOADING
+   ========================================================= */
+
+.page-loading {
+  min-height: 70vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--muted);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 800px) {
+  .simple-header {
+    min-height: 68px;
+
+    padding: 0 18px;
+  }
+
+  .brand {
+    font-size: 22px;
+  }
+
+  .brand img {
+    width: 42px;
+    height: 42px;
+  }
+
+  .container {
+    width: min(
+      calc(100% - 28px),
+      var(--container)
+    );
+  }
+
+  .dashboard-main,
+  .course-page,
+  .admin-main {
+    padding-top: 34px;
+    padding-bottom: 55px;
+  }
+
+  .dashboard-head,
+  .admin-head,
+  .section-heading-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .dashboard-head .btn,
+  .admin-head .btn {
+    align-self: flex-start;
+  }
+
+  .lesson-row {
+    grid-template-columns: 48px 1fr;
+
+    padding: 18px;
+  }
+
+  .lesson-number {
+    width: 46px;
+    height: 46px;
+  }
+
+  .lesson-status {
+    grid-column: 2;
+  }
+
+  .panel-heading-actions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 14px;
+  }
+
+  .auth-card {
+    padding: 30px 22px;
+  }
+
+  .auth-card h1 {
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 560px) {
+  .header-actions {
+    gap: 8px;
+  }
+
+  .header-link {
+    display: none;
+  }
+
+  .brand span {
+    display: none;
+  }
+
+  .lesson-navigation {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .lesson-navigation .btn {
+    width: 100%;
+  }
+
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .modal-actions .btn {
+    width: 100%;
+  }
+}
+.course-choice-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 38px rgba(59, 23, 17, 0.09) !important;
+}
