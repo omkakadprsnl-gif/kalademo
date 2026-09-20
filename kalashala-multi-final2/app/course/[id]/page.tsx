@@ -601,6 +601,115 @@ export default function LessonPage() {
           <ShareWarningModal />
         )}
 
+      <style jsx global>{`
+        .share-warning-backdrop {
+          position: fixed;
+          inset: 0;
+          z-index: 2147483647;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+          background: rgba(30, 16, 12, 0.66);
+          backdrop-filter: blur(5px);
+          -webkit-backdrop-filter: blur(5px);
+        }
+
+        .share-warning-modal {
+          position: relative;
+          width: min(100%, 460px);
+          padding: 38px 34px 30px;
+          border: 1px solid #eadccf;
+          border-radius: 18px;
+          background: #fffaf5;
+          color: #3b1711;
+          text-align: center;
+          box-shadow: 0 25px 80px rgba(25, 12, 8, 0.3);
+          font-family: Inter, Arial, sans-serif;
+        }
+
+        .share-warning-close {
+          position: absolute;
+          top: 12px;
+          right: 14px;
+          width: 34px;
+          height: 34px;
+          border: 0;
+          background: transparent;
+          color: #876f67;
+          font-size: 27px;
+          line-height: 1;
+          cursor: pointer;
+        }
+
+        .share-warning-icon {
+          width: 48px;
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 18px;
+          border: 2px solid #e97817;
+          border-radius: 50%;
+          color: #e97817;
+          font-family: Georgia, serif;
+          font-size: 27px;
+          font-weight: 700;
+        }
+
+        .share-warning-modal h2 {
+          margin: 0 0 13px;
+          font-family: "DM Serif Display", Georgia, serif;
+          font-size: 27px;
+          font-weight: 400;
+          line-height: 1.15;
+        }
+
+        .share-warning-modal p {
+          margin: 0 auto 12px;
+          color: #765e55;
+          font-size: 14px;
+          line-height: 1.65;
+        }
+
+        .share-warning-modal .share-warning-note {
+          color: #3b1711;
+          font-weight: 600;
+        }
+
+        .share-warning-button {
+          width: 100%;
+          height: 46px;
+          margin-top: 12px;
+          border: 0;
+          border-radius: 9px;
+          background: #3b1711;
+          color: #fff;
+          font-size: 13px;
+          font-weight: 700;
+          cursor: pointer;
+        }
+
+        .share-warning-button:hover {
+          opacity: 0.94;
+        }
+
+        @media (max-width: 700px) {
+          .share-warning-modal {
+            padding: 34px 22px 24px;
+            border-radius: 15px;
+          }
+
+          .share-warning-modal h2 {
+            font-size: 24px;
+          }
+
+          .share-warning-modal p {
+            font-size: 13px;
+          }
+        }
+      `}</style>
+
       <style jsx>{`
         .lesson-page {
           min-height: 100vh;
