@@ -794,12 +794,14 @@ export default function LessonPage() {
           position: absolute;
 
           left: 0;
+          right: 0;
           bottom: 0;
+          top: auto;
 
           width: 100%;
           height: 13%;
 
-          z-index: 999;
+          z-index: 9999;
 
           padding: 0;
           margin: 0;
@@ -809,6 +811,7 @@ export default function LessonPage() {
           background: transparent;
 
           cursor: pointer;
+          pointer-events: auto;
         }
 
         .youtube-share-guard:focus {
@@ -1172,12 +1175,12 @@ export default function LessonPage() {
           */
           .youtube-share-guard {
             left: 0;
+            right: 0;
             bottom: 0;
             top: auto;
-            right: auto;
 
             width: 100%;
-            height: 18%;
+            height: 16%;
           }
 
           .lesson-navigation {
