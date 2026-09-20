@@ -796,8 +796,8 @@ export default function LessonPage() {
           left: 0;
           bottom: 0;
 
-          width: 18%;
-          height: 30%;
+          width: 100%;
+          height: 13%;
 
           z-index: 999;
 
@@ -1176,8 +1176,8 @@ export default function LessonPage() {
             top: auto;
             right: auto;
 
-            width: 24%;
-            height: 36%;
+            width: 100%;
+            height: 18%;
           }
 
           .lesson-navigation {
