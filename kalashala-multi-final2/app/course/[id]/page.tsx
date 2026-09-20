@@ -2,6 +2,7 @@
 
 import {
   useEffect,
+  useRef,
   useState,
 } from "react";
 import {
@@ -66,6 +67,12 @@ export default function LessonPage() {
     useState("");
 
   const [showShareWarning, setShowShareWarning] =
+    useState(false);
+
+  const videoWrapperRef =
+    useRef<HTMLDivElement | null>(null);
+
+  const [isVideoFullscreen, setIsVideoFullscreen] =
     useState(false);
 
   useEffect(() => {
@@ -194,6 +201,57 @@ export default function LessonPage() {
     };
   }, [showShareWarning]);
 
+  useEffect(() => {
+    function handleFullscreenChange() {
+      setIsVideoFullscreen(
+        document.fullscreenElement ===
+          videoWrapperRef.current
+      );
+    }
+
+    document.addEventListener(
+      "fullscreenchange",
+      handleFullscreenChange
+    );
+
+    return () => {
+      document.removeEventListener(
+        "fullscreenchange",
+        handleFullscreenChange
+      );
+    };
+  }, []);
+
+  async function toggleVideoFullscreen() {
+    const element =
+      videoWrapperRef.current;
+
+    if (!element) {
+      return;
+    }
+
+    try {
+      if (
+        document.fullscreenElement ===
+        element
+      ) {
+        await document.exitFullscreen();
+        return;
+      }
+
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+      }
+
+      await element.requestFullscreen();
+    } catch (err) {
+      console.error(
+        "Fullscreen error:",
+        err
+      );
+    }
+  }
+
   async function logout() {
     await fetch(
       "/api/access",
@@ -262,6 +320,71 @@ export default function LessonPage() {
     getYouTubeId(
       lecture.youtube_url
     );
+
+  function ShareWarningModal() {
+    return (
+      <div
+        className="share-warning-backdrop"
+        role="presentation"
+        onMouseDown={(event) => {
+          if (
+            event.target ===
+            event.currentTarget
+          ) {
+            setShowShareWarning(false);
+          }
+        }}
+      >
+        <div
+          className="share-warning-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="share-warning-title"
+        >
+          <button
+            type="button"
+            className="share-warning-close"
+            aria-label="Close warning"
+            onClick={() =>
+              setShowShareWarning(false)
+            }
+          >
+            ×
+          </button>
+
+          <div className="share-warning-icon">
+            !
+          </div>
+
+          <h2 id="share-warning-title">
+            Sharing course content is prohibited
+          </h2>
+
+          <p>
+            These lessons are provided only
+            for enrolled Kalashala students.
+            Sharing course videos, links, or
+            access with others is not permitted.
+          </p>
+
+          <p className="share-warning-note">
+            Unauthorized sharing may result
+            in your course access being revoked.
+          </p>
+
+          <button
+            type="button"
+            className="share-warning-button"
+            onClick={() =>
+              setShowShareWarning(false)
+            }
+          >
+            I understand
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="lesson-page">
@@ -347,22 +470,22 @@ export default function LessonPage() {
 
         {/* VIDEO */}
 
-        <div className="video-wrapper">
+        <div
+          ref={videoWrapperRef}
+          className="video-wrapper"
+        >
           {videoId ? (
             <>
               <iframe
-                src={`https://www.youtube.com/embed/${videoId}`}
+                src={`https://www.youtube.com/embed/${videoId}?fs=0&playsinline=1&rel=0`}
                 title={lecture.title}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
               />
 
               {/*
-                YouTube does not expose a setting for
-                disabling only the Share button.
-
-                This transparent button sits over the
-                Share area in the normal embedded player.
+                Blocks YouTube's bottom action row.
+                This stays inside our fullscreen wrapper,
+                so it remains active in custom fullscreen.
               */}
               <button
                 type="button"
@@ -372,6 +495,31 @@ export default function LessonPage() {
                   setShowShareWarning(true)
                 }
               />
+
+              <button
+                type="button"
+                className="custom-fullscreen-button"
+                aria-label={
+                  isVideoFullscreen
+                    ? "Exit full screen"
+                    : "Enter full screen"
+                }
+                title={
+                  isVideoFullscreen
+                    ? "Exit full screen"
+                    : "Full screen"
+                }
+                onClick={toggleVideoFullscreen}
+              >
+                {isVideoFullscreen
+                  ? "×"
+                  : "⛶"}
+              </button>
+
+              {showShareWarning &&
+                isVideoFullscreen && (
+                  <ShareWarningModal />
+                )}
             </>
           ) : (
             <div className="video-error">
@@ -446,70 +594,12 @@ export default function LessonPage() {
         </div>
       </main>
 
-      {/* SHARE WARNING */}
+      {/* SHARE WARNING OUTSIDE FULLSCREEN */}
 
-      {showShareWarning && (
-        <div
-          className="share-warning-backdrop"
-          role="presentation"
-          onMouseDown={(event) => {
-            if (
-              event.target ===
-              event.currentTarget
-            ) {
-              setShowShareWarning(false);
-            }
-          }}
-        >
-          <div
-            className="share-warning-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="share-warning-title"
-          >
-            <button
-              type="button"
-              className="share-warning-close"
-              aria-label="Close warning"
-              onClick={() =>
-                setShowShareWarning(false)
-              }
-            >
-              ×
-            </button>
-
-            <div className="share-warning-icon">
-              !
-            </div>
-
-            <h2 id="share-warning-title">
-              Sharing course content is prohibited
-            </h2>
-
-            <p>
-              These lessons are provided only
-              for enrolled Kalashala students.
-              Sharing course videos, links, or
-              access with others is not permitted.
-            </p>
-
-            <p className="share-warning-note">
-              Unauthorized sharing may result
-              in your course access being revoked.
-            </p>
-
-            <button
-              type="button"
-              className="share-warning-button"
-              onClick={() =>
-                setShowShareWarning(false)
-              }
-            >
-              I understand
-            </button>
-          </div>
-        </div>
-      )}
+      {showShareWarning &&
+        !isVideoFullscreen && (
+          <ShareWarningModal />
+        )}
 
       <style jsx>{`
         .lesson-page {
@@ -816,6 +906,78 @@ export default function LessonPage() {
 
         .youtube-share-guard:focus {
           outline: none;
+        }
+
+        .custom-fullscreen-button {
+          position: absolute;
+
+          right: 14px;
+          bottom: 15%;
+
+          z-index: 10001;
+
+          width: 42px;
+          height: 42px;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          padding: 0;
+
+          border:
+            1px solid
+            rgba(255, 255, 255, 0.35);
+
+          border-radius: 10px;
+
+          background:
+            rgba(0, 0, 0, 0.68);
+
+          color: #fff;
+
+          font-size: 24px;
+          line-height: 1;
+
+          cursor: pointer;
+
+          backdrop-filter:
+            blur(5px);
+        }
+
+        .custom-fullscreen-button:hover {
+          background:
+            rgba(0, 0, 0, 0.82);
+        }
+
+        .video-wrapper:fullscreen {
+          width: 100vw;
+          height: 100vh;
+
+          aspect-ratio: auto;
+
+          border-radius: 0;
+
+          background: #000;
+
+          box-shadow: none;
+        }
+
+        .video-wrapper:fullscreen iframe {
+          width: 100%;
+          height: 100%;
+        }
+
+        .video-wrapper:fullscreen
+          .youtube-share-guard {
+          height: 15%;
+        }
+
+        .video-wrapper:fullscreen
+          .custom-fullscreen-button {
+          top: 16px;
+          right: 16px;
+          bottom: auto;
         }
 
         .video-error {
@@ -1183,6 +1345,16 @@ export default function LessonPage() {
             height: 30%;
           }
 
+          .custom-fullscreen-button {
+            right: 10px;
+            bottom: 32%;
+
+            width: 38px;
+            height: 38px;
+
+            font-size: 22px;
+          }
+
           .lesson-navigation {
             gap: 10px;
 
@@ -1213,6 +1385,24 @@ export default function LessonPage() {
 
           .share-warning-modal p {
             font-size: 13px;
+          }
+        }
+
+        @media (
+          orientation: portrait
+        ) and (max-width: 700px) {
+          .video-wrapper:fullscreen
+            .youtube-share-guard {
+            height: 30%;
+          }
+        }
+
+        @media (
+          orientation: landscape
+        ) and (max-height: 700px) {
+          .video-wrapper:fullscreen
+            .youtube-share-guard {
+            height: 16%;
           }
         }
 
