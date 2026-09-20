@@ -1180,7 +1180,7 @@ export default function LessonPage() {
             top: auto;
 
             width: 100%;
-            height: 16%;
+            height: 30%;
           }
 
           .lesson-navigation {
