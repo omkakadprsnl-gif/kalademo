@@ -793,15 +793,16 @@ export default function LessonPage() {
         .youtube-share-guard {
           position: absolute;
 
-          top: 2%;
-          right: 1%;
+          left: 0;
+          bottom: 0;
 
-          width: 10%;
-          height: 16%;
+          width: 18%;
+          height: 30%;
 
-          z-index: 5;
+          z-index: 999;
 
           padding: 0;
+          margin: 0;
 
           border: 0;
 
@@ -1170,11 +1171,13 @@ export default function LessonPage() {
             smaller screens.
           */
           .youtube-share-guard {
-            top: 0;
-            right: 0;
+            left: 0;
+            bottom: 0;
+            top: auto;
+            right: auto;
 
-            width: 16%;
-            height: 24%;
+            width: 24%;
+            height: 36%;
           }
 
           .lesson-navigation {
