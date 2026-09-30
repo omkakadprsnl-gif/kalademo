@@ -583,7 +583,6 @@ export default function LessonPage() {
         .share-warning-backdrop {
           position: fixed;
           inset: 0;
-
           z-index: 2147483647;
 
           display: flex;
@@ -1583,16 +1582,49 @@ export default function LessonPage() {
           }
 
           .youtube-bottom-guard {
+            left:
+              0;
+
+            right:
+              0;
+
+            bottom:
+              0;
+
+            top:
+              auto;
+
+            width:
+              100%;
+
             height:
               30%;
+
+            z-index:
+              99999;
           }
 
           .youtube-top-guard {
+            left:
+              0;
+
+            right:
+              0;
+
+            top:
+              0;
+
+            bottom:
+              auto;
+
             width:
-              82%;
+              100%;
 
             height:
-              22%;
+              30%;
+
+            z-index:
+              99999;
           }
 
           .custom-fullscreen-button {
@@ -1610,6 +1642,9 @@ export default function LessonPage() {
 
             font-size:
               22px;
+
+            z-index:
+              100000;
           }
 
           .lesson-navigation {
@@ -1643,6 +1678,12 @@ export default function LessonPage() {
             height:
               30%;
           }
+
+          .video-wrapper:fullscreen
+            .youtube-top-guard {
+            height:
+              30%;
+          }
         }
 
         @media (
@@ -1652,6 +1693,12 @@ export default function LessonPage() {
             .youtube-bottom-guard {
             height:
               16%;
+          }
+
+          .video-wrapper:fullscreen
+            .youtube-top-guard {
+            height:
+              18%;
           }
         }
 
