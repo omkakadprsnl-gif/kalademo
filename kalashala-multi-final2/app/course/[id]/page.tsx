@@ -10,12 +10,6 @@ import {
   useRouter,
 } from "next/navigation";
 
-type Course = {
-  id: string;
-  title: string;
-  description: string | null;
-};
-
 type Lecture = {
   id: string;
   position: number;
@@ -51,9 +45,6 @@ export default function LessonPage() {
   const params =
     useParams<{ id: string }>();
 
-  const [course, setCourse] =
-    useState<Course | null>(null);
-
   const [lectures, setLectures] =
     useState<Lecture[]>([]);
 
@@ -66,14 +57,18 @@ export default function LessonPage() {
   const [error, setError] =
     useState("");
 
-  const [showShareWarning, setShowShareWarning] =
-    useState(false);
+  const [
+    showShareWarning,
+    setShowShareWarning,
+  ] = useState(false);
 
   const videoWrapperRef =
     useRef<HTMLDivElement | null>(null);
 
-  const [isVideoFullscreen, setIsVideoFullscreen] =
-    useState(false);
+  const [
+    isVideoFullscreen,
+    setIsVideoFullscreen,
+  ] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -106,9 +101,7 @@ export default function LessonPage() {
         const data =
           await response.json();
 
-        if (
-          response.status === 401
-        ) {
+        if (response.status === 401) {
           router.replace("/login");
           return;
         }
@@ -145,15 +138,13 @@ export default function LessonPage() {
           );
         }
 
-        setCourse(
-          data.course || null
-        );
-
         setLectures(
           sortedLectures
         );
 
-        setLecture(selected);
+        setLecture(
+          selected
+        );
       } catch (err) {
         console.error(
           "Lesson error:",
@@ -388,8 +379,6 @@ export default function LessonPage() {
 
   return (
     <div className="lesson-page">
-      {/* HEADER */}
-
       <header className="lesson-header">
         <button
           type="button"
@@ -406,7 +395,9 @@ export default function LessonPage() {
             alt="Kalashala"
           />
 
-          <span>Kalashala</span>
+          <span>
+            Kalashala
+          </span>
         </button>
 
         <div className="lesson-header-actions">
@@ -432,8 +423,6 @@ export default function LessonPage() {
         </div>
       </header>
 
-      {/* MAIN */}
-
       <main className="lesson-container">
         <button
           type="button"
@@ -446,8 +435,6 @@ export default function LessonPage() {
         >
           ← Back to lessons
         </button>
-
-        {/* TITLE */}
 
         <section className="lesson-heading">
           <div className="lesson-label">
@@ -468,8 +455,6 @@ export default function LessonPage() {
           )}
         </section>
 
-        {/* VIDEO */}
-
         <div
           ref={videoWrapperRef}
           className="video-wrapper"
@@ -482,15 +467,19 @@ export default function LessonPage() {
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               />
 
-              {/*
-                Blocks YouTube's bottom action row.
-                This stays inside our fullscreen wrapper,
-                so it remains active in custom fullscreen.
-              */}
               <button
                 type="button"
-                className="youtube-share-guard"
+                className="youtube-bottom-guard"
                 aria-label="Course sharing notice"
+                onClick={() =>
+                  setShowShareWarning(true)
+                }
+              />
+
+              <button
+                type="button"
+                className="youtube-top-guard"
+                aria-label="Course video notice"
                 onClick={() =>
                   setShowShareWarning(true)
                 }
@@ -509,7 +498,9 @@ export default function LessonPage() {
                     ? "Exit full screen"
                     : "Full screen"
                 }
-                onClick={toggleVideoFullscreen}
+                onClick={
+                  toggleVideoFullscreen
+                }
               >
                 {isVideoFullscreen
                   ? "×"
@@ -529,8 +520,6 @@ export default function LessonPage() {
           )}
         </div>
 
-        {/* NAVIGATION */}
-
         <div className="lesson-navigation">
           {previous ? (
             <button
@@ -542,13 +531,8 @@ export default function LessonPage() {
                 )
               }
             >
-              <span>
-                ←
-              </span>
-
-              <span>
-                Previous
-              </span>
+              <span>←</span>
+              <span>Previous</span>
             </button>
           ) : (
             <div />
@@ -568,9 +552,7 @@ export default function LessonPage() {
                 Next lesson
               </span>
 
-              <span>
-                →
-              </span>
+              <span>→</span>
             </button>
           ) : (
             <button
@@ -586,15 +568,11 @@ export default function LessonPage() {
                 Back to course
               </span>
 
-              <span>
-                →
-              </span>
+              <span>→</span>
             </button>
           )}
         </div>
       </main>
-
-      {/* SHARE WARNING OUTSIDE FULLSCREEN */}
 
       {showShareWarning &&
         !isVideoFullscreen && (
@@ -605,613 +583,8 @@ export default function LessonPage() {
         .share-warning-backdrop {
           position: fixed;
           inset: 0;
+
           z-index: 2147483647;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 20px;
-          background: rgba(30, 16, 12, 0.66);
-          backdrop-filter: blur(5px);
-          -webkit-backdrop-filter: blur(5px);
-        }
-
-        .share-warning-modal {
-          position: relative;
-          width: min(100%, 460px);
-          padding: 38px 34px 30px;
-          border: 1px solid #eadccf;
-          border-radius: 18px;
-          background: #fffaf5;
-          color: #3b1711;
-          text-align: center;
-          box-shadow: 0 25px 80px rgba(25, 12, 8, 0.3);
-          font-family: Inter, Arial, sans-serif;
-        }
-
-        .share-warning-close {
-          position: absolute;
-          top: 12px;
-          right: 14px;
-          width: 34px;
-          height: 34px;
-          border: 0;
-          background: transparent;
-          color: #876f67;
-          font-size: 27px;
-          line-height: 1;
-          cursor: pointer;
-        }
-
-        .share-warning-icon {
-          width: 48px;
-          height: 48px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 0 auto 18px;
-          border: 2px solid #e97817;
-          border-radius: 50%;
-          color: #e97817;
-          font-family: Georgia, serif;
-          font-size: 27px;
-          font-weight: 700;
-        }
-
-        .share-warning-modal h2 {
-          margin: 0 0 13px;
-          font-family: "DM Serif Display", Georgia, serif;
-          font-size: 27px;
-          font-weight: 400;
-          line-height: 1.15;
-        }
-
-        .share-warning-modal p {
-          margin: 0 auto 12px;
-          color: #765e55;
-          font-size: 14px;
-          line-height: 1.65;
-        }
-
-        .share-warning-modal .share-warning-note {
-          color: #3b1711;
-          font-weight: 600;
-        }
-
-        .share-warning-button {
-          width: 100%;
-          height: 46px;
-          margin-top: 12px;
-          border: 0;
-          border-radius: 9px;
-          background: #3b1711;
-          color: #fff;
-          font-size: 13px;
-          font-weight: 700;
-          cursor: pointer;
-        }
-
-        .share-warning-button:hover {
-          opacity: 0.94;
-        }
-
-        @media (max-width: 700px) {
-          .share-warning-modal {
-            padding: 34px 22px 24px;
-            border-radius: 15px;
-          }
-
-          .share-warning-modal h2 {
-            font-size: 24px;
-          }
-
-          .share-warning-modal p {
-            font-size: 13px;
-          }
-        }
-      `}</style>
-
-      <style jsx>{`
-        .lesson-page {
-          min-height: 100vh;
-          background: #faf7f2;
-          color: #3b1711;
-          font-family:
-            Inter,
-            Arial,
-            sans-serif;
-        }
-
-        .lesson-loading {
-          min-height: 100vh;
-
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          background: #faf7f2;
-
-          color: #765e55;
-
-          font-family:
-            Inter,
-            Arial,
-            sans-serif;
-        }
-
-        .lesson-header {
-          position: sticky;
-          top: 0;
-          z-index: 20;
-
-          height: 76px;
-
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-
-          padding:
-            0 clamp(18px, 4vw, 54px);
-
-          background:
-            rgba(
-              250,
-              247,
-              242,
-              0.96
-            );
-
-          border-bottom:
-            1px solid #e5d9ce;
-
-          backdrop-filter:
-            blur(12px);
-        }
-
-        .lesson-brand {
-          display: inline-flex;
-          align-items: center;
-          gap: 11px;
-
-          padding: 0;
-
-          border: 0;
-
-          background: transparent;
-
-          color: #3b1711;
-
-          cursor: pointer;
-        }
-
-        .lesson-brand img {
-          width: 44px;
-          height: 44px;
-
-          object-fit: contain;
-        }
-
-        .lesson-brand span {
-          font-family:
-            "DM Serif Display",
-            Georgia,
-            serif;
-
-          font-size: 25px;
-        }
-
-        .lesson-header-actions {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-
-        .course-button {
-          border: 0;
-
-          background: transparent;
-
-          color: #65453d;
-
-          padding:
-            10px 13px;
-
-          cursor: pointer;
-
-          font-size: 13px;
-          font-weight: 500;
-        }
-
-        .course-button:hover {
-          color: #e97817;
-        }
-
-        .outline-button {
-          height: 42px;
-
-          padding:
-            0 16px;
-
-          border:
-            1px solid #e5d9ce;
-
-          border-radius: 9px;
-
-          background: #fff;
-
-          color: #3b1711;
-
-          font-size: 13px;
-          font-weight: 600;
-
-          cursor: pointer;
-
-          transition:
-            transform 0.18s ease,
-            border-color 0.18s ease;
-        }
-
-        .outline-button:hover {
-          transform:
-            translateY(-1px);
-
-          border-color:
-            #cdbbae;
-        }
-
-        .lesson-container {
-          width:
-            min(
-              calc(100% - 40px),
-              1080px
-            );
-
-          margin: 0 auto;
-
-          padding:
-            43px 0 80px;
-        }
-
-        .back-link {
-          display: inline-flex;
-
-          padding: 0;
-          margin-bottom: 30px;
-
-          border: 0;
-
-          background: transparent;
-
-          color: #65453d;
-
-          font-size: 14px;
-
-          cursor: pointer;
-        }
-
-        .back-link:hover {
-          color: #e97817;
-        }
-
-        .lesson-heading {
-          max-width: 850px;
-
-          margin-bottom: 30px;
-        }
-
-        .lesson-label {
-          margin-bottom: 9px;
-
-          color: #e97817;
-
-          font-size: 11px;
-          font-weight: 700;
-
-          letter-spacing:
-            0.2em;
-
-          text-transform:
-            uppercase;
-        }
-
-        .lesson-heading h1 {
-          margin: 0;
-
-          font-family:
-            "DM Serif Display",
-            Georgia,
-            serif;
-
-          font-size:
-            clamp(
-              40px,
-              5.5vw,
-              58px
-            );
-
-          font-weight: 400;
-
-          line-height: 1.08;
-
-          letter-spacing:
-            -0.015em;
-        }
-
-        .lesson-heading p {
-          margin:
-            14px 0 0;
-
-          max-width: 760px;
-
-          color: #876f67;
-
-          font-size: 16px;
-
-          line-height: 1.7;
-        }
-
-        .video-wrapper {
-          position: relative;
-
-          width: 100%;
-
-          aspect-ratio: 16 / 9;
-
-          overflow: hidden;
-
-          border-radius: 17px;
-
-          background: #18120f;
-
-          box-shadow:
-            0 18px 50px
-            rgba(
-              59,
-              23,
-              17,
-              0.12
-            );
-        }
-
-        .video-wrapper iframe {
-          width: 100%;
-          height: 100%;
-
-          display: block;
-
-          border: 0;
-        }
-
-        /*
-          Transparent interception area over
-          YouTube's Share control.
-
-          These percentages are intentionally
-          relative to the player so the guard
-          scales with the video.
-        */
-        .youtube-share-guard {
-          position: absolute;
-
-          left: 0;
-          right: 0;
-          bottom: 0;
-          top: auto;
-
-          width: 100%;
-          height: 13%;
-
-          z-index: 9999;
-
-          padding: 0;
-          margin: 0;
-
-          border: 0;
-
-          background: transparent;
-
-          cursor: pointer;
-          pointer-events: auto;
-        }
-
-        .youtube-share-guard:focus {
-          outline: none;
-        }
-
-        .custom-fullscreen-button {
-          position: absolute;
-
-          right: 14px;
-          bottom: 15%;
-
-          z-index: 10001;
-
-          width: 42px;
-          height: 42px;
-
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          padding: 0;
-
-          border:
-            1px solid
-            rgba(255, 255, 255, 0.35);
-
-          border-radius: 10px;
-
-          background:
-            rgba(0, 0, 0, 0.68);
-
-          color: #fff;
-
-          font-size: 24px;
-          line-height: 1;
-
-          cursor: pointer;
-
-          backdrop-filter:
-            blur(5px);
-        }
-
-        .custom-fullscreen-button:hover {
-          background:
-            rgba(0, 0, 0, 0.82);
-        }
-
-        .video-wrapper:fullscreen {
-          width: 100vw;
-          height: 100vh;
-
-          aspect-ratio: auto;
-
-          border-radius: 0;
-
-          background: #000;
-
-          box-shadow: none;
-        }
-
-        .video-wrapper:fullscreen iframe {
-          width: 100%;
-          height: 100%;
-        }
-
-        .video-wrapper:fullscreen
-          .youtube-share-guard {
-          height: 15%;
-        }
-
-        .video-wrapper:fullscreen
-          .custom-fullscreen-button {
-          top: 16px;
-          right: 16px;
-          bottom: auto;
-        }
-
-        .video-error {
-          width: 100%;
-          height: 100%;
-
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          padding: 30px;
-
-          color: #fff;
-
-          text-align: center;
-        }
-
-        .lesson-navigation {
-          display: flex;
-
-          align-items: center;
-          justify-content:
-            space-between;
-
-          gap: 12px;
-
-          margin-top: 24px;
-        }
-
-        .nav-button {
-          min-height: 46px;
-
-          display: inline-flex;
-
-          align-items: center;
-          justify-content: center;
-
-          gap: 9px;
-
-          padding:
-            0 17px;
-
-          border-radius: 9px;
-
-          font-size: 13px;
-          font-weight: 600;
-
-          cursor: pointer;
-
-          transition:
-            transform 0.18s ease;
-        }
-
-        .nav-button:hover {
-          transform:
-            translateY(-1px);
-        }
-
-        .nav-button.previous {
-          border:
-            1px solid #e5d9ce;
-
-          background: #fff;
-
-          color: #3b1711;
-        }
-
-        .nav-button.next {
-          border: 0;
-
-          background: #3b1711;
-
-          color: #fff;
-        }
-
-        .lesson-error-page {
-          min-height: 100vh;
-
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          padding: 30px;
-
-          background: #faf7f2;
-
-          font-family:
-            Inter,
-            Arial,
-            sans-serif;
-        }
-
-        .lesson-error-box {
-          width:
-            min(
-              100%,
-              700px
-            );
-        }
-
-        .error-message {
-          margin-bottom: 20px;
-
-          padding:
-            16px 18px;
-
-          border:
-            1px solid #efc9c3;
-
-          border-radius: 11px;
-
-          background: #fff2ef;
-
-          color: #a62d20;
-
-          font-size: 14px;
-        }
-
-        /* SHARE WARNING MODAL */
-
-        .share-warning-backdrop {
-          position: fixed;
-          inset: 0;
-
-          z-index: 9999;
 
           display: flex;
           align-items: center;
@@ -1228,6 +601,9 @@ export default function LessonPage() {
             );
 
           backdrop-filter:
+            blur(5px);
+
+          -webkit-backdrop-filter:
             blur(5px);
         }
 
@@ -1246,13 +622,17 @@ export default function LessonPage() {
           border:
             1px solid #eadccf;
 
-          border-radius: 18px;
+          border-radius:
+            18px;
 
-          background: #fffaf5;
+          background:
+            #fffaf5;
 
-          color: #3b1711;
+          color:
+            #3b1711;
 
-          text-align: center;
+          text-align:
+            center;
 
           box-shadow:
             0 25px 80px
@@ -1262,6 +642,11 @@ export default function LessonPage() {
               8,
               0.3
             );
+
+          font-family:
+            Inter,
+            Arial,
+            sans-serif;
         }
 
         .share-warning-close {
@@ -1275,14 +660,20 @@ export default function LessonPage() {
 
           border: 0;
 
-          background: transparent;
+          background:
+            transparent;
 
-          color: #876f67;
+          color:
+            #876f67;
 
-          font-size: 27px;
-          line-height: 1;
+          font-size:
+            27px;
 
-          cursor: pointer;
+          line-height:
+            1;
+
+          cursor:
+            pointer;
         }
 
         .share-warning-icon {
@@ -1299,16 +690,21 @@ export default function LessonPage() {
           border:
             2px solid #e97817;
 
-          border-radius: 50%;
+          border-radius:
+            50%;
 
-          color: #e97817;
+          color:
+            #e97817;
 
           font-family:
             Georgia,
             serif;
 
-          font-size: 27px;
-          font-weight: 700;
+          font-size:
+            27px;
+
+          font-weight:
+            700;
         }
 
         .share-warning-modal h2 {
@@ -1320,94 +716,842 @@ export default function LessonPage() {
             Georgia,
             serif;
 
-          font-size: 27px;
-          font-weight: 400;
+          font-size:
+            27px;
 
-          line-height: 1.15;
+          font-weight:
+            400;
+
+          line-height:
+            1.15;
         }
 
         .share-warning-modal p {
           margin:
             0 auto 12px;
 
-          color: #765e55;
+          color:
+            #765e55;
 
-          font-size: 14px;
-          line-height: 1.65;
+          font-size:
+            14px;
+
+          line-height:
+            1.65;
         }
 
         .share-warning-modal
           .share-warning-note {
-          color: #3b1711;
+          color:
+            #3b1711;
 
-          font-weight: 600;
+          font-weight:
+            600;
         }
 
         .share-warning-button {
           width: 100%;
           height: 46px;
 
-          margin-top: 12px;
+          margin-top:
+            12px;
 
           border: 0;
 
-          border-radius: 9px;
+          border-radius:
+            9px;
 
-          background: #3b1711;
+          background:
+            #3b1711;
 
-          color: #fff;
+          color:
+            #fff;
 
-          font-size: 13px;
-          font-weight: 700;
+          font-size:
+            13px;
 
-          cursor: pointer;
+          font-weight:
+            700;
+
+          cursor:
+            pointer;
         }
 
         .share-warning-button:hover {
-          opacity: 0.94;
+          opacity:
+            0.94;
+        }
+
+        @media (max-width: 700px) {
+          .share-warning-modal {
+            padding:
+              34px 22px 24px;
+
+            border-radius:
+              15px;
+          }
+
+          .share-warning-modal h2 {
+            font-size:
+              24px;
+          }
+
+          .share-warning-modal p {
+            font-size:
+              13px;
+          }
+        }
+      `}</style>
+
+      <style jsx>{`
+        .lesson-page {
+          min-height: 100vh;
+
+          background:
+            #faf7f2;
+
+          color:
+            #3b1711;
+
+          font-family:
+            Inter,
+            Arial,
+            sans-serif;
+        }
+
+        .lesson-loading {
+          min-height: 100vh;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          background:
+            #faf7f2;
+
+          color:
+            #765e55;
+
+          font-family:
+            Inter,
+            Arial,
+            sans-serif;
+        }
+
+        .lesson-header {
+          position: sticky;
+
+          top: 0;
+
+          z-index: 20;
+
+          height: 76px;
+
+          display: flex;
+          align-items: center;
+          justify-content:
+            space-between;
+
+          padding:
+            0
+            clamp(
+              18px,
+              4vw,
+              54px
+            );
+
+          background:
+            rgba(
+              250,
+              247,
+              242,
+              0.96
+            );
+
+          border-bottom:
+            1px solid
+            #e5d9ce;
+
+          backdrop-filter:
+            blur(12px);
+        }
+
+        .lesson-brand {
+          display:
+            inline-flex;
+
+          align-items:
+            center;
+
+          gap:
+            11px;
+
+          padding:
+            0;
+
+          border:
+            0;
+
+          background:
+            transparent;
+
+          color:
+            #3b1711;
+
+          cursor:
+            pointer;
+        }
+
+        .lesson-brand img {
+          width:
+            44px;
+
+          height:
+            44px;
+
+          object-fit:
+            contain;
+        }
+
+        .lesson-brand span {
+          font-family:
+            "DM Serif Display",
+            Georgia,
+            serif;
+
+          font-size:
+            25px;
+        }
+
+        .lesson-header-actions {
+          display: flex;
+
+          align-items:
+            center;
+
+          gap:
+            8px;
+        }
+
+        .course-button {
+          border:
+            0;
+
+          background:
+            transparent;
+
+          color:
+            #65453d;
+
+          padding:
+            10px 13px;
+
+          cursor:
+            pointer;
+
+          font-size:
+            13px;
+
+          font-weight:
+            500;
+        }
+
+        .course-button:hover {
+          color:
+            #e97817;
+        }
+
+        .outline-button {
+          height:
+            42px;
+
+          padding:
+            0 16px;
+
+          border:
+            1px solid
+            #e5d9ce;
+
+          border-radius:
+            9px;
+
+          background:
+            #fff;
+
+          color:
+            #3b1711;
+
+          font-size:
+            13px;
+
+          font-weight:
+            600;
+
+          cursor:
+            pointer;
+        }
+
+        .lesson-container {
+          width:
+            min(
+              calc(
+                100% - 40px
+              ),
+              1080px
+            );
+
+          margin:
+            0 auto;
+
+          padding:
+            43px 0 80px;
+        }
+
+        .back-link {
+          display:
+            inline-flex;
+
+          padding:
+            0;
+
+          margin-bottom:
+            30px;
+
+          border:
+            0;
+
+          background:
+            transparent;
+
+          color:
+            #65453d;
+
+          font-size:
+            14px;
+
+          cursor:
+            pointer;
+        }
+
+        .back-link:hover {
+          color:
+            #e97817;
+        }
+
+        .lesson-heading {
+          max-width:
+            850px;
+
+          margin-bottom:
+            30px;
+        }
+
+        .lesson-label {
+          margin-bottom:
+            9px;
+
+          color:
+            #e97817;
+
+          font-size:
+            11px;
+
+          font-weight:
+            700;
+
+          letter-spacing:
+            0.2em;
+
+          text-transform:
+            uppercase;
+        }
+
+        .lesson-heading h1 {
+          margin:
+            0;
+
+          font-family:
+            "DM Serif Display",
+            Georgia,
+            serif;
+
+          font-size:
+            clamp(
+              40px,
+              5.5vw,
+              58px
+            );
+
+          font-weight:
+            400;
+
+          line-height:
+            1.08;
+
+          letter-spacing:
+            -0.015em;
+        }
+
+        .lesson-heading p {
+          margin:
+            14px 0 0;
+
+          max-width:
+            760px;
+
+          color:
+            #876f67;
+
+          font-size:
+            16px;
+
+          line-height:
+            1.7;
+        }
+
+        .video-wrapper {
+          position:
+            relative;
+
+          width:
+            100%;
+
+          aspect-ratio:
+            16 / 9;
+
+          overflow:
+            hidden;
+
+          border-radius:
+            17px;
+
+          background:
+            #18120f;
+
+          box-shadow:
+            0 18px 50px
+            rgba(
+              59,
+              23,
+              17,
+              0.12
+            );
+        }
+
+        .video-wrapper iframe {
+          width:
+            100%;
+
+          height:
+            100%;
+
+          display:
+            block;
+
+          border:
+            0;
+        }
+
+        .youtube-bottom-guard {
+          position:
+            absolute;
+
+          left:
+            0;
+
+          right:
+            0;
+
+          bottom:
+            0;
+
+          top:
+            auto;
+
+          width:
+            100%;
+
+          height:
+            13%;
+
+          z-index:
+            9999;
+
+          padding:
+            0;
+
+          margin:
+            0;
+
+          border:
+            0;
+
+          background:
+            transparent;
+
+          cursor:
+            pointer;
+
+          pointer-events:
+            auto;
+        }
+
+        .youtube-bottom-guard:focus {
+          outline:
+            none;
+        }
+
+        .youtube-top-guard {
+          position:
+            absolute;
+
+          left:
+            0;
+
+          top:
+            0;
+
+          width:
+            72%;
+
+          height:
+            18%;
+
+          z-index:
+            9999;
+
+          padding:
+            0;
+
+          margin:
+            0;
+
+          border:
+            0;
+
+          background:
+            transparent;
+
+          cursor:
+            pointer;
+
+          pointer-events:
+            auto;
+        }
+
+        .youtube-top-guard:focus {
+          outline:
+            none;
+        }
+
+        .custom-fullscreen-button {
+          position:
+            absolute;
+
+          right:
+            14px;
+
+          bottom:
+            15%;
+
+          z-index:
+            10001;
+
+          width:
+            42px;
+
+          height:
+            42px;
+
+          display:
+            flex;
+
+          align-items:
+            center;
+
+          justify-content:
+            center;
+
+          padding:
+            0;
+
+          border:
+            1px solid
+            rgba(
+              255,
+              255,
+              255,
+              0.35
+            );
+
+          border-radius:
+            10px;
+
+          background:
+            rgba(
+              0,
+              0,
+              0,
+              0.68
+            );
+
+          color:
+            #fff;
+
+          font-size:
+            24px;
+
+          line-height:
+            1;
+
+          cursor:
+            pointer;
+        }
+
+        .video-wrapper:fullscreen {
+          width:
+            100vw;
+
+          height:
+            100vh;
+
+          aspect-ratio:
+            auto;
+
+          border-radius:
+            0;
+
+          background:
+            #000;
+
+          box-shadow:
+            none;
+        }
+
+        .video-wrapper:fullscreen iframe {
+          width:
+            100%;
+
+          height:
+            100%;
+        }
+
+        .video-wrapper:fullscreen
+          .youtube-bottom-guard {
+          height:
+            15%;
+        }
+
+        .video-wrapper:fullscreen
+          .custom-fullscreen-button {
+          top:
+            16px;
+
+          right:
+            16px;
+
+          bottom:
+            auto;
+        }
+
+        .video-error {
+          width:
+            100%;
+
+          height:
+            100%;
+
+          display:
+            flex;
+
+          align-items:
+            center;
+
+          justify-content:
+            center;
+
+          padding:
+            30px;
+
+          color:
+            #fff;
+
+          text-align:
+            center;
+        }
+
+        .lesson-navigation {
+          display:
+            flex;
+
+          align-items:
+            center;
+
+          justify-content:
+            space-between;
+
+          gap:
+            12px;
+
+          margin-top:
+            24px;
+        }
+
+        .nav-button {
+          min-height:
+            46px;
+
+          display:
+            inline-flex;
+
+          align-items:
+            center;
+
+          justify-content:
+            center;
+
+          gap:
+            9px;
+
+          padding:
+            0 17px;
+
+          border-radius:
+            9px;
+
+          font-size:
+            13px;
+
+          font-weight:
+            600;
+
+          cursor:
+            pointer;
+        }
+
+        .nav-button.previous {
+          border:
+            1px solid
+            #e5d9ce;
+
+          background:
+            #fff;
+
+          color:
+            #3b1711;
+        }
+
+        .nav-button.next {
+          border:
+            0;
+
+          background:
+            #3b1711;
+
+          color:
+            #fff;
+        }
+
+        .lesson-error-page {
+          min-height:
+            100vh;
+
+          display:
+            flex;
+
+          align-items:
+            center;
+
+          justify-content:
+            center;
+
+          padding:
+            30px;
+
+          background:
+            #faf7f2;
+        }
+
+        .lesson-error-box {
+          width:
+            min(
+              100%,
+              700px
+            );
+        }
+
+        .error-message {
+          margin-bottom:
+            20px;
+
+          padding:
+            16px 18px;
+
+          border:
+            1px solid
+            #efc9c3;
+
+          border-radius:
+            11px;
+
+          background:
+            #fff2ef;
+
+          color:
+            #a62d20;
+
+          font-size:
+            14px;
         }
 
         @media (max-width: 700px) {
           .lesson-header {
-            height: 64px;
+            height:
+              64px;
 
             padding:
               0 14px;
           }
 
           .lesson-brand {
-            gap: 8px;
+            gap:
+              8px;
           }
 
           .lesson-brand img {
-            width: 38px;
-            height: 38px;
+            width:
+              38px;
+
+            height:
+              38px;
           }
 
           .lesson-brand span {
-            font-size: 21px;
-          }
-
-          .lesson-header-actions {
-            gap: 3px;
+            font-size:
+              21px;
           }
 
           .course-button {
-            display: none;
+            display:
+              none;
           }
 
           .outline-button {
-            height: 39px;
+            height:
+              39px;
 
             padding:
               0 13px;
 
-            font-size: 12px;
+            font-size:
+              12px;
           }
 
           .lesson-container {
             width:
-              calc(100% - 24px);
+              calc(
+                100% - 24px
+              );
 
             padding:
               28px 0 56px;
@@ -1424,15 +1568,13 @@ export default function LessonPage() {
           }
 
           .lesson-heading h1 {
-            font-size: 37px;
-
-            line-height: 1.08;
+            font-size:
+              37px;
           }
 
           .lesson-heading p {
-            font-size: 14px;
-
-            line-height: 1.65;
+            font-size:
+              14px;
           }
 
           .video-wrapper {
@@ -1440,60 +1582,56 @@ export default function LessonPage() {
               12px;
           }
 
-          /*
-            Slightly larger touch target on
-            smaller screens.
-          */
-          .youtube-share-guard {
-            left: 0;
-            right: 0;
-            bottom: 0;
-            top: auto;
+          .youtube-bottom-guard {
+            height:
+              30%;
+          }
 
-            width: 100%;
-            height: 30%;
+          .youtube-top-guard {
+            width:
+              82%;
+
+            height:
+              22%;
           }
 
           .custom-fullscreen-button {
-            right: 10px;
-            bottom: 32%;
+            right:
+              10px;
 
-            width: 38px;
-            height: 38px;
+            bottom:
+              32%;
 
-            font-size: 22px;
+            width:
+              38px;
+
+            height:
+              38px;
+
+            font-size:
+              22px;
           }
 
           .lesson-navigation {
-            gap: 10px;
+            gap:
+              10px;
 
-            margin-top: 18px;
+            margin-top:
+              18px;
           }
 
           .nav-button {
-            min-height: 44px;
+            min-height:
+              44px;
 
-            flex: 1;
+            flex:
+              1;
 
             padding:
               0 12px;
 
-            font-size: 12px;
-          }
-
-          .share-warning-modal {
-            padding:
-              34px 22px 24px;
-
-            border-radius: 15px;
-          }
-
-          .share-warning-modal h2 {
-            font-size: 24px;
-          }
-
-          .share-warning-modal p {
-            font-size: 13px;
+            font-size:
+              12px;
           }
         }
 
@@ -1501,8 +1639,9 @@ export default function LessonPage() {
           orientation: portrait
         ) and (max-width: 700px) {
           .video-wrapper:fullscreen
-            .youtube-share-guard {
-            height: 30%;
+            .youtube-bottom-guard {
+            height:
+              30%;
           }
         }
 
@@ -1510,23 +1649,28 @@ export default function LessonPage() {
           orientation: landscape
         ) and (max-height: 700px) {
           .video-wrapper:fullscreen
-            .youtube-share-guard {
-            height: 16%;
+            .youtube-bottom-guard {
+            height:
+              16%;
           }
         }
 
         @media (max-width: 400px) {
           .lesson-brand span {
-            font-size: 19px;
+            font-size:
+              19px;
           }
 
           .lesson-container {
             width:
-              calc(100% - 18px);
+              calc(
+                100% - 18px
+              );
           }
 
           .lesson-heading h1 {
-            font-size: 33px;
+            font-size:
+              33px;
           }
 
           .nav-button {
